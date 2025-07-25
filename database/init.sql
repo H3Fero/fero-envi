@@ -1,0 +1,13 @@
+CREATE DATABASE IF NOT EXISTS eurostar;
+USE eurostar;
+CREATE TABLE IF NOT EXISTS assistance (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    prenom VARCHAR(100) NOT NULL,
+    genre VARCHAR(50) NOT NULL,
+    age INT NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    handicap VARCHAR(100) NOT NULL,
+    autre_handicap VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

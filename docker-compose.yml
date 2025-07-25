@@ -1,0 +1,151 @@
+version: '3.8'
+
+services:
+
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--log.level=INFO"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8081:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml
+      - ./traefik/dynamic_conf.yml:/etc/traefik/dynamic_conf.yml
+      - ./traefik/certs/:/etc/traefik/certs/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.localhost`)"
+      - "traefik.http.routers.traefik.entrypoints=web"
+      - "traefik.http.routers.traefik.tls=true"
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+    networks:
+      - eurostar
+
+  frontend:
+    image: httpd:2.4
+    container_name: eurostar_frontend
+    volumes:
+      - ./frontend/html:/usr/local/apache2/htdocs/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`eurostar.localhost`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls=true"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+    networks:
+      - eurostar
+
+  assistance-api:
+    build: ./assistance_api
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=eurostar
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.assistance.rule=Host(`api.localhost`) && PathPrefix(`/assistance`)"
+      - "traefik.http.routers.assistance.entrypoints=websecure"
+      - "traefik.http.routers.assistance.tls=true"
+      - "traefik.http.services.assistance.loadbalancer.server.port=8002"
+    networks:
+      - eurostar
+
+  geo-api:
+    build: ./geo_api
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.geo.rule=Host(`api.localhost`) && PathPrefix(`/localisation`)"
+      - "traefik.http.routers.geo.entrypoints=websecure"
+      - "traefik.http.routers.geo.tls=true"
+      - "traefik.http.services.geo.loadbalancer.server.port=8003"
+    networks:
+      - eurostar
+
+  realtime-api:
+    build: ./realtime_api
+    depends_on:
+      - redis
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.horaires.rule=Host(`api.localhost`) && PathPrefix(`/horaires`)"
+      - "traefik.http.routers.horaires.entrypoints=websecure"
+      - "traefik.http.routers.horaires.tls=true"
+      - "traefik.http.services.horaires.loadbalancer.server.port=8001"
+    networks:
+      - eurostar
+
+  streaming-api:
+    build: ./streaming_api
+    depends_on:
+      - minio
+    environment:
+      - MINIO_ENDPOINT=minio
+      - MINIO_PORT=9000
+      - AWS_ACCESS_KEY_ID=admin
+      - AWS_SECRET_ACCESS_KEY=admin1234
+      - PUBLIC_ENDPOINT=minio.localhost
+      - PUBLIC_USE_SSL=false
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.streaming.rule=Host(`api.localhost`) && PathPrefix(`/contenu`)"
+      - "traefik.http.routers.streaming.entrypoints=websecure"
+      - "traefik.http.routers.streaming.tls=true"
+      - "traefik.http.services.streaming.loadbalancer.server.port=8080"
+    networks:
+      - eurostar
+
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: eurostar
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - eurostar
+
+  redis:
+    image: redis:7
+    networks:
+      - eurostar
+
+  minio:
+    image: minio/minio
+    command: server /data
+    environment:
+      MINIO_ACCESS_KEY: admin
+      MINIO_SECRET_KEY: admin1234
+      MINIO_BROWSER: "on"
+      MINIO_DOMAIN: minio.localhost
+      MINIO_CORS_ALLOW_ORIGIN: "*"
+    volumes:
+      - ./data:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.minio.rule=Host(`minio.localhost`)"
+      - "traefik.http.routers.minio.entrypoints=websecure"
+      - "traefik.http.routers.minio.tls=true"
+      - "traefik.http.services.minio.loadbalancer.server.port=9000"
+    networks:
+      - eurostar
+
+networks:
+  eurostar:
+    driver: bridge
