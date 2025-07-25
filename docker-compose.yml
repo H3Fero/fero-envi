@@ -33,7 +33,7 @@ services:
     image: httpd:2.4
     container_name: eurostar_frontend
     volumes:
-      - ./frontend/html:/usr/local/apache2/htdocs/
+      - ./frontend/html/:/usr/local/apache2/htdocs/
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`eurostar.localhost`)"
