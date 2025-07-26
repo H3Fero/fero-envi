@@ -15,19 +15,19 @@ cache = redis.Redis(host="redis", port=6379, decode_responses=True)
 
 stations_data = {
     "Paris": [
-        {"train": "ES001", "destination": "Londres", "heure": "08:00"},
-        {"train": "ES002", "destination": "Amsterdam", "heure": "09:30"},
-        {"train": "ES003", "destination": "Lisbonne", "heure": "12:00"}
+        {"train": "EIY30U", "destination": "Londres", "heure": "08:00"},
+        {"train": "AEV7C0", "destination": "Amsterdam", "heure": "09:30"},
+        {"train": "A9TI8C", "destination": "Lisbonne", "heure": "12:00"}
     ],
     "Amsterdam": [
-        {"train": "ES004", "destination": "Paris", "heure": "10:00"},
-        {"train": "ES005", "destination": "Londres", "heure": "15:30"}
+        {"train": "E2ME1Z", "destination": "Paris", "heure": "10:00"},
+        {"train": "A4SH3L", "destination": "Londres", "heure": "15:30"}
     ],
     "Londres": [
-        {"train": "ES006", "destination": "Paris", "heure": "09:00"}
+        {"train": "WI0PH1", "destination": "Paris", "heure": "09:00"}
     ],
     "Lisbonne": [
-        {"train": "ES007", "destination": "Paris", "heure": "07:00"}
+        {"train": "OHNAH9", "destination": "Paris", "heure": "07:00"}
     ]
 }
 
