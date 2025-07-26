@@ -1,10 +1,18 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from minio import Minio
 from datetime import timedelta
 import os
 import urllib3
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://localhost", "http://localhost","*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 MINIO_ENDPOINT = os.environ.get("MINIO_ENDPOINT", "minio:9000")

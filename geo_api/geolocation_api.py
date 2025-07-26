@@ -1,8 +1,16 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from geopy.distance import geodesic
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://localhost", "http://localhost","*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 STATIONS = {
     "Paris": (48.8566, 2.3522),
     "Amsterdam": (52.379189, 4.899431),
