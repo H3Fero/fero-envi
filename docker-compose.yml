@@ -36,7 +36,7 @@ services:
       - ./frontend/html/:/usr/local/apache2/htdocs/
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`eurostar.localhost`)"
+      - "traefik.http.routers.frontend.rule=Host(`localhost`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.tls=true"
       - "traefik.http.services.frontend.loadbalancer.server.port=80"
