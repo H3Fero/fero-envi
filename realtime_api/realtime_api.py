@@ -21,7 +21,8 @@ stations_data = {
     ],
     "Amsterdam": [
         {"train": "E2ME1Z", "destination": "Paris", "heure": "10:00"},
-        {"train": "A4SH3L", "destination": "Londres", "heure": "15:30"}
+        {"train": "A4SH3L", "destination": "Londres", "heure": "15:30"},
+        {"train": "UJ2CHU", "destination": "Lisbonne", "heure": "17:00"}
     ],
     "Londres": [
         {"train": "WI0PH1", "destination": "Paris", "heure": "09:00"}

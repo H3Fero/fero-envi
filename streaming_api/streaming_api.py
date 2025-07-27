@@ -15,7 +15,8 @@ app.add_middleware(
 )
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-MINIO_ENDPOINT = os.environ.get("MINIO_ENDPOINT", "minio:9000")
+MINIO_ENDPOINT = os.environ.get("MINIO_ENDPOINT", "minio")
+MINIO_PORT = os.environ.get("MINIO_PORT", "9000")
 MINIO_ACCESS_KEY = os.environ.get("AWS_ACCESS_KEY_ID", "admin")
 MINIO_SECRET_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "admin1234")
 PUBLIC_ENDPOINT = os.environ.get("PUBLIC_ENDPOINT", "minio.localhost")
