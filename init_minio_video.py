@@ -22,4 +22,4 @@ for fname in os.listdir(source_dir):
         src_path = os.path.join(source_dir, fname)
         print(f"Uploading {fname}...")
         client.fput_object(bucket, fname, src_path)
-print("✔️ Import terminé !")
+print("Import terminé !")
