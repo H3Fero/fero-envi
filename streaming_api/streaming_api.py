@@ -24,7 +24,7 @@ PUBLIC_USE_SSL = os.environ.get("PUBLIC_USE_SSL", "false").lower() == "true"
 BUCKET = "films"
 
 internal_client = Minio(
-    MINIO_ENDPOINT,
+    f"{MINIO_ENDPOINT}:{MINIO_PORT}",
     access_key=MINIO_ACCESS_KEY,
     secret_key=MINIO_SECRET_KEY,
     secure=False
