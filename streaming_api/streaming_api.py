@@ -37,6 +37,12 @@ public_client = Minio(
     http_client=urllib3.PoolManager(cert_reqs='CERT_NONE')
 )
 
+@app.on_event("startup")
+def startup_event():
+    if not internal_client.bucket_exists(BUCKET):
+        internal_client.make_bucket(BUCKET)
+
+
 @app.get("/contenu/{film_name}")
 def get_film_url(film_name: str):
     try:
