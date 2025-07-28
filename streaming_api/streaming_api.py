@@ -1,7 +1,9 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from minio import Minio
+from minio.error import S3Error
 from datetime import timedelta
+import json
 import os
 import urllib3
 
@@ -40,7 +42,18 @@ public_client = Minio(
 def startup_event():
     if not internal_client.bucket_exists(BUCKET):
         internal_client.make_bucket(BUCKET)
-
+        policy = {
+            "Version": "2012-10-17",
+            "Statement": [{
+                "Action": ["s3:GetObject"],
+                "Effect": "Allow",
+                "Principal": {"AWS": ["*"]},
+                "Resource": [f"arn:aws:s3:::{BUCKET}/*"],
+                "Sid": ""
+            }]
+        }
+        policy_json = json.dumps(policy)
+        internal_client.set_bucket_policy(BUCKET, policy_json)
 
 @app.get("/contenu/{film_name}")
 def get_film_url(film_name: str):

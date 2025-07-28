@@ -136,6 +136,8 @@ services:
       MINIO_CORS_ALLOW_ORIGIN: "*"
     volumes:
       - ./data:/data
+    ports:
+      - 9000:9000
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.minio.rule=Host(`minio.localhost`)"
