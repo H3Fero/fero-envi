@@ -85,17 +85,10 @@
             border-radius: 10px;
             margin-top: 20px;
         }
-        .video-container iframe {
-            width: 100%;
-            height: 400px;
-            border: none;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
         @media (max-width: 600px) {
             .container { padding: 10px; }
             .film-menu img { width: 70px; height: 100px; }
-            #map, .video-container video, .video-container iframe { height: 220px; }
+            #map, .video-container video { height: 220px; }
         }
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
@@ -176,9 +169,6 @@
 </div>
 
 <script>
-const apiBase = "https://api.localhost";  // Adapte si besoin !
-
-// Login
 function checkLogin() {
     const trainNumber = document.getElementById("trainNumber").value.trim();
     const lastName = document.getElementById("lastName").value.trim();
@@ -192,7 +182,6 @@ function checkLogin() {
     }
 }
 
-// Onglets
 function showSection(id, button) {
     document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
     document.querySelectorAll('#geoSection, #multimediaSection, #assistanceForm, #scheduleSection').forEach(sec => sec.classList.add('hidden'));
@@ -202,7 +191,7 @@ function showSection(id, button) {
     if (id === 'multimediaSection') loadFilms();
 }
 
-// Carte Leaflet
+// ----- LEAFLET -----
 let leafletMap = null;
 let geoRoute = null;
 function initMap() {
@@ -239,29 +228,23 @@ function initMap() {
     }
 }
 
-// Multimédia MinIO
+// ----- MULTIMEDIA VIDÉOS DIRECTEMENT -----
 const films = [
     { name: "paris.mp4", cover: "https://via.placeholder.com/100x150?text=Paris", label: "Paris" },
     { name: "amsterdam.mp4", cover: "https://via.placeholder.com/100x150?text=Amsterdam", label: "Amsterdam" },
-    { name: "londres.mp4", cover: "https://via.placeholder.com/100x150?text=Londres", label: "Londres" }
+    { name: "londres.mp4", cover: "https://via.placeholder.com/100x150?text=Londres", label: "Londres" },
+    { name: "lisbonne.mp4", cover: "https://via.placeholder.com/100x150?text=Lisbonne", label: "Lisbonne" }
 ];
 function loadFilms() {
     const filmMenu = document.getElementById("filmMenu");
     filmMenu.innerHTML = "";
     films.forEach(film => {
-        fetch(`${apiBase}/contenu/${film.name}`)
-            .then(r => r.json())
-            .then(data => {
-                const img = document.createElement('img');
-                img.src = film.cover;
-                img.alt = film.label;
-                img.title = film.label;
-                img.onclick = () => selectFilm(data.stream_url, film.label);
-                filmMenu.appendChild(img);
-            })
-            .catch(() => {
-                // Si la vidéo n'existe pas encore sur MinIO, ne rien afficher
-            });
+        const img = document.createElement('img');
+        img.src = film.cover;
+        img.alt = film.label;
+        img.title = film.label;
+        img.onclick = () => selectFilm(`videos/${film.name}`, film.label);
+        filmMenu.appendChild(img);
     });
 }
 function selectFilm(url, label) {
@@ -270,6 +253,9 @@ function selectFilm(url, label) {
          <div style="text-align:center;font-weight:bold;margin:10px 0">${label}</div>`;
 }
 
+// ----- ASSISTANCE/API/HORAIRES inchangés -----
+// Ici tu peux garder la logique fetch AJAX si tes APIs sont up,
+// ou commenter temporairement pour démo full offline.
 // Assistance
 function submitAssistance() {
     const data = {
