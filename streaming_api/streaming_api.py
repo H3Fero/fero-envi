@@ -18,7 +18,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 MINIO_ENDPOINT = os.environ.get("MINIO_ENDPOINT", "minio")
 MINIO_ACCESS_KEY = os.environ.get("AWS_ACCESS_KEY_ID", "admin")
 MINIO_SECRET_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "admin1234")
-PUBLIC_ENDPOINT = os.environ.get("PUBLIC_ENDPOINT", "minio.localhost")
+PUBLIC_ENDPOINT = os.environ.get("PUBLIC_ENDPOINT", "minio.localhost:9000")
 PUBLIC_USE_SSL = os.environ.get("PUBLIC_USE_SSL", "false").lower() == "true"
 BUCKET = "films"
 

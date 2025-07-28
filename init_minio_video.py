@@ -10,7 +10,7 @@ client = Minio(
 )
 
 bucket = "films"
-source_dir = "./data"  # Ton dossier local où sont les vidéos
+source_dir = "/data"  # Ton dossier local où sont les vidéos
 
 # Crée le bucket si nécessaire
 if not client.bucket_exists(bucket):
