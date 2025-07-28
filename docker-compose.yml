@@ -145,6 +145,23 @@ services:
       - "traefik.http.services.minio.loadbalancer.server.port=9000"
     networks:
       - eurostar
+  
+  minio_import:
+    image: python:3.11
+    depends_on: 
+      - minio
+    volumes:
+      - ./init_minio_video.py:/init_minio_video.py
+      - ./data/:/data/
+    entrypoint: >
+      sh -c "pip install minio && python /init_minio_video.py"
+    environment:
+    - MINIO_ENDPOINT=minio:9000
+    - MINIO_ACCESS_KEY=admin
+    - MINIO_SECRET_KEY=admin1234
+    networks:
+      - eurostar
+
 
 networks:
   eurostar:
