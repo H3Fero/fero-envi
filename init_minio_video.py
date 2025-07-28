@@ -3,7 +3,7 @@ import os
 
 # Configuration MinIO depuis ton Docker Compose
 client = Minio(
-    "127.0.0.1:43293",            # ou "minio:9000" si lancé depuis un conteneur
+    "minio:9000",            # ou "minio:9000" si lancé depuis un conteneur
     access_key="admin",          # adapte selon ta conf
     secret_key="admin1234",      # adapte selon ta conf
     secure=False                 # True si tu utilises HTTPS
