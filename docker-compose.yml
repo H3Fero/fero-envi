@@ -36,14 +36,12 @@ services:
       - ./frontend/html/:/usr/local/apache2/htdocs/
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`localhost`)"
+      - "traefik.http.routers.frontend.rule=Host(`envi-fero.ams.h3fero.com`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.tls=true"
       - "traefik.http.services.frontend.loadbalancer.server.port=80"
     networks:
       - eurostar
-    #ports:
-    #  - "80:80"
 
   assistance-api:
     build: ./assistance_api
@@ -57,7 +55,7 @@ services:
       - MYSQL_DATABASE=eurostar
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.assistance.rule=Host(`api.localhost`) && PathPrefix(`/assistance`)"
+      - "traefik.http.routers.assistance.rule=Host(`api.envi-fero.ams.h3fero.com`) && PathPrefix(`/assistance`)"
       - "traefik.http.routers.assistance.entrypoints=websecure"
       - "traefik.http.routers.assistance.tls=true"
       - "traefik.http.services.assistance.loadbalancer.server.port=8002"
@@ -68,7 +66,7 @@ services:
     build: ./geo_api
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.geo.rule=Host(`api.localhost`) && PathPrefix(`/localisation`)"
+      - "traefik.http.routers.geo.rule=Host(`api.envi-fero.ams.h3fero.com`) && PathPrefix(`/localisation`)"
       - "traefik.http.routers.geo.entrypoints=websecure"
       - "traefik.http.routers.geo.tls=true"
       - "traefik.http.services.geo.loadbalancer.server.port=8003"
@@ -81,7 +79,7 @@ services:
       - redis
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.horaires.rule=Host(`api.localhost`) && PathPrefix(`/horaires`)"
+      - "traefik.http.routers.horaires.rule=Host(`api.envi-fero.ams.h3fero.com`) && PathPrefix(`/horaires`)"
       - "traefik.http.routers.horaires.entrypoints=websecure"
       - "traefik.http.routers.horaires.tls=true"
       - "traefik.http.services.horaires.loadbalancer.server.port=8001"
