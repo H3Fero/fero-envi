@@ -49,6 +49,12 @@ services:
       mysql:
         condition: service_healthy
     environment:
+      - SMTP_SERVER=smtp.gmail.com
+      - SMPT_PORT=587
+      - SMTP_USER=h3fero@gmail.Com
+      - SMPT_PASSWORD='yehq kekk jxnc lhmg'
+      - SMTP_FROM_EMAIL=assistance@envi-fero.h3fero.com
+      - SMTP_TO_EMAIL=h3fero@gmail.com
       - MYSQL_HOST=mysql
       - MYSQL_USER=root
       - MYSQL_PASSWORD=password
