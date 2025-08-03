@@ -9,6 +9,13 @@ import os
 from datetime import datetime
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Configuration email (via variables d'environnement pour la sécurité)
 SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
