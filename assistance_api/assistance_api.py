@@ -53,8 +53,8 @@ class AssistanceForm(BaseModel):
 
 def generate_ticket_number():
     """Génère un numéro de billet unique basé sur la date et l'heure"""
-    now = datetime.now()
-    return f"{now.strftime('%Y%m%d')}{now.strftime('%H%M%S')}"
+    import random
+    return f"{random.randint(100000, 999999)}"
 
 def send_assistance_email(data: AssistanceForm, ticket_number: str):
     """Envoie un email d'assistance avec le format professionnel demandé"""
